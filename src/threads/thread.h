@@ -100,6 +100,9 @@ struct thread
 
     /* Owned by thread.c. */
     unsigned magic;                     /* Detects stack overflow. */
+
+    //ticks to be blocked when sleeping
+    int64_t ticks_to_be_blocked;
   };
 
 /* If false (default), use round-robin scheduler.
@@ -137,5 +140,7 @@ int thread_get_nice (void);
 void thread_set_nice (int);
 int thread_get_recent_cpu (void);
 int thread_get_load_avg (void);
+
+void thread_block_check (struct thread *t, void *aux UNUSED);
 
 #endif /* threads/thread.h */

@@ -206,6 +206,8 @@ thread_create (const char *name, int priority,
 
   intr_set_level (old_level);
 
+  t->ticks_to_be_blocked = 0;
+
   /* Add to run queue. */
   thread_unblock (t);
 
@@ -226,6 +228,24 @@ thread_block (void)
 
   thread_current ()->status = THREAD_BLOCKED;
   schedule ();
+}
+
+/*
+handle thread block
+if it is blocked, then ticks_to_be_blocked -= 1
+after that, if ticks_to_be_blocked == 0, unblock the thread 
+*/
+void
+thread_block_check(struct thread *t, void *aux UNUSED)
+{
+  if (t->status == THREAD_BLOCKED && t->ticks_to_be_blocked > 0)
+  {
+    t->ticks_to_be_blocked--;
+    if (t->ticks_to_be_blocked == 0)
+    {
+      thread_unblock(t);
+    }
+  }
 }
 
 /* Transitions a blocked thread T to the ready-to-run state.
