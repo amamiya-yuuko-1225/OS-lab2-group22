@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "thread.h": "c"
+        "thread.h": "c",
+        "shared_mutex": "c"
     }
 }
